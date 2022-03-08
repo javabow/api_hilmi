@@ -50,6 +50,20 @@ class AuthController extends Controller
         ]);
     }
 
+    public function logout(Request $request)
+    {
+
+
+        try {
+            // delete the current token that was used for the request
+            $request->user()->currentAccessToken()->delete();
+
+            return response()->json(array('success' => true), 200);
+        } catch (\Exception $e) {
+            return response()->json(array('success' => false), 401);
+        }
+    }
+
     public function me(Request $request)
     {
 
