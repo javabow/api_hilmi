@@ -12,7 +12,7 @@ class ReportController extends Controller
     {
         $validatedData = $request->validate([
             'report' => ['required'],
-            'report_name' => ['required'],
+            'report_name' => ['required']
         ]);
 
         $add_report = new Report;
