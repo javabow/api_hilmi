@@ -41,6 +41,7 @@ class InventoryController extends Controller
         //
     }
 
+    // untuk get single data by id untuk di bind ke vue variable yang akan update otomatis ke form modal
     public function getDataId(Request $request, $id)
     {
         // $validatedData = $request->validate([
@@ -62,6 +63,7 @@ class InventoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // untuk menyimpan data ke inventory
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -97,6 +99,7 @@ class InventoryController extends Controller
      * @param  \App\Models\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
+    // untuk display data ke frontend melalui api
     public function show(Inventory $inventory, Request $request)
     {
         // $invent = Inventory::whereUser_id($request->user()->id)->with(['type' => function ($q) {
@@ -129,6 +132,7 @@ class InventoryController extends Controller
      * @param  \App\Models\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
+    // untuk update data ke inventory
     public function update(Request $request, Inventory $inventory)
     {
         $validatedData = $request->validate([
@@ -158,6 +162,7 @@ class InventoryController extends Controller
      * @param  \App\Models\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
+    // untuk delete data ke inventory
     public function destroy(Request $request, Inventory $inventory)
     {
 
