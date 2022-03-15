@@ -30,7 +30,7 @@ Route::post('/report/insert', [ReportController::class, 'insert'])->middleware('
 
 //inventory
 Route::get('/data-product', [InventoryController::class, 'show'])->middleware('auth:sanctum');
-Route::get('/get-single-data-product', [InventoryController::class, 'getDataId'])->middleware('auth:sanctum');
+Route::get('/get-single-data-product/{id}', [InventoryController::class, 'getDataId'])->middleware('auth:sanctum');
 Route::post('/product-update', [InventoryController::class, 'update'])->middleware('auth:sanctum');
 Route::post('/product-insert', [InventoryController::class, 'store'])->middleware('auth:sanctum');
 Route::post('/product-delete', [InventoryController::class, 'destroy'])->middleware('auth:sanctum');

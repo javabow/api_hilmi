@@ -41,13 +41,13 @@ class InventoryController extends Controller
         //
     }
 
-    public function getDataId(Request $request)
+    public function getDataId(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'edit_id' => ['required', 'numeric'],
-        ]);
+        // $validatedData = $request->validate([
+        //     'edit_id' => ['required', 'numeric'],
+        // ]);
 
-        if ($haha = Inventory::whereUser_id($request->user()->id)->whereId($request->edit_id)->with(['type' => function ($q) {
+        if ($haha = Inventory::whereUser_id($request->user()->id)->whereId($id)->with(['type' => function ($q) {
             $q->select(['id', 'type_name']);
         }])->get()) {
             return response()->json(array('success' => true, 'data' => $haha), 200);
@@ -67,22 +67,22 @@ class InventoryController extends Controller
         $validatedData = $request->validate([
             'harga' => ['required', 'numeric'],
             'stok' => ['required', 'numeric'],
-            'type_id' => ['required', 'numeric'],
+            // 'type_id' => ['required', 'numeric'],
             'nama_barang' => ['required'],
         ]);
 
-        try {
-            Type::FindOrFail($request->type_id);
-        } catch (\Exception $e) {
-            return response()->json(array('success' => false), 401);
-        }
+        // try {
+        //     Type::FindOrFail($request->type_id);
+        // } catch (\Exception $e) {
+        //     return response()->json(array('success' => false), 401);
+        // }
 
         $add_inventory = new Inventory;
         $add_inventory->user_id = $request->user()->id;
         $add_inventory->harga = $request->harga;
         $add_inventory->stok = $request->stok;
         $add_inventory->nama_barang = $request->nama_barang;
-        $add_inventory->type_id = $request->type_id;
+        // $add_inventory->type_id = $request->type_id;
 
         if ($add_inventory->save()) {
             return response()->json(array('success' => true, 'last_insert_id' => $add_inventory->id), 201);
@@ -99,12 +99,16 @@ class InventoryController extends Controller
      */
     public function show(Inventory $inventory, Request $request)
     {
-        $invent = Inventory::whereUser_id($request->user()->id)->with(['type' => function ($q) {
-            $q->select(['id', 'type_name']);
-        }])->get();
+        // $invent = Inventory::whereUser_id($request->user()->id)->with(['type' => function ($q) {
+        //     $q->select(['id', 'type_name']);
+        // }])->get();
 
-        // return $haha;
-        return DataTables::of($invent)->make(true);
+        // // return $haha;
+        // return DataTables::of($invent)->make(true);
+        $pageLength = request('pageLength') ?? 10;
+        $inventory = Inventory::whereUser_id($request->user()->id)->filtered();
+
+        return response()->json($inventory->paginate($pageLength), 200);
     }
 
     /**
@@ -131,12 +135,12 @@ class InventoryController extends Controller
             'id' => ['required'],
             'harga' => ['required', 'numeric'],
             'stok' => ['required', 'numeric'],
-            'type_id' => ['required', 'numeric'],
+            // 'type_id' => ['required', 'numeric'],
             'nama_barang' => ['required'],
         ]);
 
         try {
-            Type::FindOrFail($request->type_id);
+            // Type::FindOrFail($request->type_id);
 
             $up_inventory = Inventory::whereUser_id($request->user()->id)->FindOrFail($request->id);
 
@@ -144,7 +148,7 @@ class InventoryController extends Controller
 
             return response()->json(array('success' => true, 'last_update_id' => $up_inventory->id), 200);
         } catch (\Exception $e) {
-            return response()->json(array('success' => false), 401);
+            return response()->json(array('success' => false, 'error' => $e->getMessage()), 401);
         }
     }
 
@@ -164,7 +168,7 @@ class InventoryController extends Controller
 
             return response()->json(array('success' => true, 'last_update_id' => $up_inventory->id), $status = 200);
         } catch (\Exception $e) {
-            return response()->json(array('success' => false), 401);
+            return response()->json(array('success' => false, 'error' => $e->getMessage()), 401);
         }
     }
 }
